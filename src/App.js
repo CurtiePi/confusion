@@ -1,12 +1,15 @@
 import './App.css';
 import { Navbar, NavbarBrand } from 'reactstrap';
 import Main from './components/MainComponent.js';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-        <Main />
-    </div>
+     <BrowserRouter>
+        <div className="App">
+            <Main />
+        </div>
+     </BrowserRouter>
   );
 }
 
