@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Navbar, NavbarBrand } from 'reactstrap';
 import Menu from './MenuComponent.js';
 import Home from './HomeComponent.js';
 import Contact from './ContactComponent.js';
 import Header from './HeaderComponent.js';
 import Footer from './FooterComponent.js';
 import DishDetail from './DishDetailComponent.js';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import { DISHES } from '../shared/dishes';
 import { COMMENTS } from '../shared/comments';
 import { LEADERS } from '../shared/leaders';
@@ -34,14 +33,15 @@ class Main extends Component {
             <div>
                 <Header />
                 <Routes>
-                    <Route path="/home" element={<Home dish={this.state.dishes.filter((dish) => dish.featured)[0]}
-                        promotion={this.state.promotions.filter((promo) => promo.featured)[0]}
-                        leader={this.state.leaders.filter((leader) => leader.featured)[0]} />} />
+                    <Route path="/home" element={<HomeWrapperComponent dishes={this.state.dishes}
+                        promotions={this.state.promotions}
+                        leaders={this.state.leaders} />} />
                     <Route exact path="/menu" element={<Menu dishes={this.state.dishes} /> } />}
                     <Route exact path="/contactus" element={<Contact /> } />}
-                    <Route path="*" element={<Home dish={this.state.dishes.filter((dish) => dish.featured)[0]}
-                        promotion={this.state.promotions.filter((promo) => promo.featured)[0]}
-                        leader={this.state.leaders.filter((leader) => leader.featured)[0]} />} />
+                    <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.state.dishes} comments={this.state.comments} />}  />
+                    <Route path="*" element={<HomeWrapperComponent dishes={this.state.dishes}
+                        promotions={this.state.promotions}
+                        leaders={this.state.leaders} />} />
                 </Routes>
                 <Footer />
             </div>
@@ -49,4 +49,19 @@ class Main extends Component {
     }
 }
 
+function DishWrapperComponent(props) {
+    let { dishId } = useParams();
+    return(
+        <DishDetail dish={props.dishes.filter((dish) => dish.id === parseInt(dishId, 10))[0]}
+                    comments={props.comments.filter((comment) => comment.dishId === parseInt(dishId, 10))} />
+    );
+}
+
+function HomeWrapperComponent(props) {
+    return(
+        <Home dish={props.dishes.filter((dish) => dish.featured)[0]}
+              promotion={props.promotions.filter((promo) => promo.featured)[0]}
+              leader={props.leaders.filter((leader) => leader.featured)[0]} />
+    );
+}
 export default Main;
