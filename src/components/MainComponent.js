@@ -6,27 +6,23 @@ import About from './AboutComponent.js';
 import Header from './HeaderComponent.js';
 import Footer from './FooterComponent.js';
 import DishDetail from './DishDetailComponent.js';
-import { Routes, Route, useParams } from 'react-router-dom';
-import { DISHES } from '../shared/dishes';
-import { COMMENTS } from '../shared/comments';
-import { LEADERS } from '../shared/leaders';
-import { PROMOTIONS } from '../shared/promotions';
+import { Routes, Route, useParams, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+
+const mapStateToProps = state => {
+    return{
+        dishes: state.dishes,
+        comments: state.comments,
+        leaders: state.leaders,
+        promotions: state.promotions,
+    }
+}
 
 class Main extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            dishes: DISHES,
-            comments: COMMENTS,
-            leaders: LEADERS,
-            promotions: PROMOTIONS,
-            selectedDish: null
-        };
-    }
-
-    onDishSelected(dishId) {
-        this.setState({selectedDish: dishId});
     }
 
     render() {
@@ -34,16 +30,16 @@ class Main extends Component {
             <div>
                 <Header />
                 <Routes>
-                    <Route path="/home" element={<HomeWrapperComponent dishes={this.state.dishes}
-                        promotions={this.state.promotions}
-                        leaders={this.state.leaders} />} />
-                    <Route exact path="/menu" element={<Menu dishes={this.state.dishes} /> } />}
+                    <Route path="/home" element={<HomeWrapperComponent dishes={this.props.dishes}
+                        promotions={this.props.promotions}
+                        leaders={this.props.leaders} />} />
+                    <Route exact path="/menu" element={<Menu dishes={this.props.dishes} /> } />}
                     <Route exact path="/contactus" element={<Contact /> } />
-                    <Route exact path="/aboutus" element={<About leaders={this.state.leaders} /> } />
-                    <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.state.dishes} comments={this.state.comments} />}  />
-                    <Route path="*" element={<HomeWrapperComponent dishes={this.state.dishes}
-                        promotions={this.state.promotions}
-                        leaders={this.state.leaders} />} />
+                    <Route exact path="/aboutus" element={<About leaders={this.props.leaders} /> } />
+                    <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.props.dishes} comments={this.props.comments} />}  />
+                    <Route path="*" element={<HomeWrapperComponent dishes={this.props.dishes}
+                        promotions={this.props.promotions}
+                        leaders={this.props.leaders} />} />
                 </Routes>
                 <Footer />
             </div>
@@ -66,4 +62,4 @@ function HomeWrapperComponent(props) {
               leader={props.leaders.filter((leader) => leader.featured)[0]} />
     );
 }
-export default Main;
+export default withRouter(connect(mapStateToProps)(Main));
