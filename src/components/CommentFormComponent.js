@@ -8,10 +8,10 @@ class CommentForm extends Component {
         this.state = {
             isModalOpen: false,
             touched: {
-                username: false
+                author: false
             },
             errors: {
-                username: ''
+                author: ''
             }
         }
 
@@ -29,7 +29,7 @@ class CommentForm extends Component {
 
     handleCommentSubmit(event) {
         this.toggleModal();
-        alert(`Rating: ${this.rating.value} Username: ${this.username.value} Comment: ${this.comment.value}`);
+        this.props.addComment(this.props.dishId, this.rating.value, this.author.value, this.comment.value);
         event.preventDefault();
     }
 
@@ -44,13 +44,13 @@ class CommentForm extends Component {
     validateUsername = (evt) => {
         const field = evt.target.name;
 
-        if (this.state.touched.username && evt.target.value.length < 3){
+        if (this.state.touched.author && evt.target.value.length < 3){
             console.log('Too short');
             this.setState({
                 errors: {...this.state.errors, [field]: 'Your name should be >= 3 characters'}
             });
         }
-        else if (this.state.touched.username && evt.target.value.length > 15){
+        else if (this.state.touched.author && evt.target.value.length > 15){
             console.log('Too long');
             this.setState({
                 errors: {...this.state.errors, [field]: 'Your Name should be <= 15 characters'}
@@ -90,11 +90,11 @@ class CommentForm extends Component {
                                     </Input>
                                 </FormGroup>
                                 <FormGroup>
-                                    <Label htmlFor="username">Your Name</Label>
-                                    <Input type="text" id="username" name="username"
-                                        innerRef={(input) => this.username = input }
-                                        valid={this.state.errors.username === ''}
-                                        invalid={this.state.errors.username !== ''}
+                                    <Label htmlFor="author">Your Name</Label>
+                                    <Input type="text" id="author" name="author"
+                                        innerRef={(input) => this.author = input }
+                                        valid={this.state.errors.author === ''}
+                                        invalid={this.state.errors.author !== ''}
                                         onBlur={(e) => {
                                                 this.handleBlur(e);
                                                 this.validateUsername(e);
@@ -102,7 +102,7 @@ class CommentForm extends Component {
                                         }
                                         
                                     />
-                                    <FormFeedback>{this.state.errors.username}</FormFeedback>
+                                    <FormFeedback>{this.state.errors.author}</FormFeedback>
                                 </FormGroup>
                                 <FormGroup row> 
                                     <Label htmlFor="comment">Comment</Label>

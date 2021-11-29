@@ -8,7 +8,7 @@ import Footer from './FooterComponent.js';
 import DishDetail from './DishDetailComponent.js';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-
+import { addComment } from '../redux/ActionCreators.js';
 
 const mapStateToProps = state => {
     return{
@@ -18,6 +18,10 @@ const mapStateToProps = state => {
         promotions: state.promotions,
     }
 }
+
+const mapDispatchToProps = (dispatch) => ({
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+});
 
 class Main extends Component {
 
@@ -32,7 +36,7 @@ class Main extends Component {
                     <Route exact path="/menu" element={<Menu dishes={this.props.dishes} /> } />}
                     <Route exact path="/contactus" element={<Contact /> } />
                     <Route exact path="/aboutus" element={<About leaders={this.props.leaders} /> } />
-                    <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.props.dishes} comments={this.props.comments} />}  />
+                    <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.props.dishes} comments={this.props.comments} addComment={this.props.addComment} />}  />
                     <Route path="*" element={<HomeWrapperComponent dishes={this.props.dishes}
                         promotions={this.props.promotions}
                         leaders={this.props.leaders} />} />
@@ -47,7 +51,9 @@ function DishWrapperComponent(props) {
     let { dishId } = useParams();
     return(
         <DishDetail dish={props.dishes.filter((dish) => dish.id === parseInt(dishId, 10))[0]}
-                    comments={props.comments.filter((comment) => comment.dishId === parseInt(dishId, 10))} />
+                    comments={props.comments.filter((comment) => comment.dishId === parseInt(dishId, 10))}
+                    addComment={props.addComment}
+        />
     );
 }
 
@@ -58,4 +64,4 @@ function HomeWrapperComponent(props) {
               leader={props.leaders.filter((leader) => leader.featured)[0]} />
     );
 }
-export default connect(mapStateToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
