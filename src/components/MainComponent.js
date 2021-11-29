@@ -6,7 +6,7 @@ import About from './AboutComponent.js';
 import Header from './HeaderComponent.js';
 import Footer from './FooterComponent.js';
 import DishDetail from './DishDetailComponent.js';
-import { Routes, Route, useParams, withRouter } from 'react-router-dom';
+import { Routes, Route, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 
@@ -20,10 +20,6 @@ const mapStateToProps = state => {
 }
 
 class Main extends Component {
-    constructor(props) {
-        super(props);
-
-    }
 
     render() {
         return (
@@ -62,4 +58,4 @@ function HomeWrapperComponent(props) {
               leader={props.leaders.filter((leader) => leader.featured)[0]} />
     );
 }
-export default withRouter(connect(mapStateToProps)(Main));
+export default connect(mapStateToProps)(Main);
