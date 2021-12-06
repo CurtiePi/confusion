@@ -9,6 +9,7 @@ import DishDetail from './DishDetailComponent.js';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators.js';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapStateToProps = state => {
     return{
@@ -38,36 +39,40 @@ class Main extends Component {
         return (
             <div>
                 <Header />
-                <Routes>
-                    <Route path="/home" element={<HomeWrapperComponent dishes={this.props.dishes.dishes}
-                        promotions={this.props.promotions.promotions}
-                        leaders={this.props.leaders}
-                        dishesLoading={this.props.dishes.isLoading}
-                        dishesErrMess={this.props.dishes.errMess}
-                        promosLoading={this.props.promotions.isLoading}
-                        promosErrMess={this.props.promotions.errMess} /> }
-                    />
-                    <Route exact path="/menu" element={<Menu dishes={this.props.dishes} /> } />}
-                    <Route exact path="/contactus" element={<Contact /> } />
-                    <Route exact path="/aboutus" element={<About leaders={this.props.leaders} /> } />
-                    <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.props.dishes.dishes}
-                        comments={this.props.comments.comments}
-                        postComment={this.props.postComment}
-                        dishesLoading={this.props.dishes.isLoading}
-                        dishesErrMess={this.props.dishes.errMess} /> }
-                        commentsErrMess={this.props.comments.errMess} /> }
-                        />} 
-                    />
-                    <Route path="*" element={<HomeWrapperComponent dishes={this.props.dishes.dishes}
-                        promotions={this.props.promotions.promotions}
-                        leaders={this.props.leaders}
-                        dishesLoading={this.props.dishes.isLoading}
-                        dishesErrMess={this.props.dishes.errMess}
-                        promosLoading={this.props.promotions.isLoading}
-                        promosErrMess={this.props.promotions.errMess} 
-                        />}
-                    />
-                </Routes>
+                <TransitionGroup>
+                    <CSSTransition in={true} classNames="page" timeout={500}>
+                        <Routes>
+                            <Route path="/home" element={<HomeWrapperComponent dishes={this.props.dishes.dishes}
+                                promotions={this.props.promotions.promotions}
+                                leaders={this.props.leaders}
+                                dishesLoading={this.props.dishes.isLoading}
+                                dishesErrMess={this.props.dishes.errMess}
+                                promosLoading={this.props.promotions.isLoading}
+                                promosErrMess={this.props.promotions.errMess} /> }
+                            />
+                            <Route exact path="/menu" element={<Menu dishes={this.props.dishes} /> } />}
+                            <Route exact path="/contactus" element={<Contact /> } />
+                            <Route exact path="/aboutus" element={<About leaders={this.props.leaders} /> } />
+                            <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.props.dishes.dishes}
+                                comments={this.props.comments.comments}
+                                postComment={this.props.postComment}
+                                dishesLoading={this.props.dishes.isLoading}
+                                dishesErrMess={this.props.dishes.errMess} /> }
+                                commentsErrMess={this.props.comments.errMess} /> }
+                                />} 
+                            />
+                            <Route path="*" element={<HomeWrapperComponent dishes={this.props.dishes.dishes}
+                                promotions={this.props.promotions.promotions}
+                                leaders={this.props.leaders}
+                                dishesLoading={this.props.dishes.isLoading}
+                                dishesErrMess={this.props.dishes.errMess}
+                                promosLoading={this.props.promotions.isLoading}
+                                promosErrMess={this.props.promotions.errMess} 
+                                />}
+                            />
+                        </Routes>
+                    </CSSTransition>
+                </TransitionGroup>
                 <Footer />
             </div>
          );
