@@ -4,17 +4,18 @@ import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl.js';
 
 function RenderCard({item, isLoading, errMess}) {
-        if(isLoading) {
+        console.log(`The error ${errMess}`);
+        if (isLoading) {
             return(
                 <Loading />
             );
         }
-        else if(errMess) {
+        else if (errMess) {
             return(
                 <h4>{errMess}</h4>
             );
         }
-        else{
+        else {
             return(
                 <Card>
                     <CardImg src={baseUrl + item.image} alt={item.name} />

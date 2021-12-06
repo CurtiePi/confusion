@@ -8,7 +8,7 @@ import Footer from './FooterComponent.js';
 import DishDetail from './DishDetailComponent.js';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators.js';
+import { postComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators.js';
 
 const mapStateToProps = state => {
     return{
@@ -20,7 +20,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
+    postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment)),
     fetchDishes: () => {dispatch(fetchDishes())},
     fetchComments: () => {dispatch(fetchComments())},
     fetchPromos: () => {dispatch(fetchPromos())},
@@ -52,7 +52,7 @@ class Main extends Component {
                     <Route exact path="/aboutus" element={<About leaders={this.props.leaders} /> } />
                     <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.props.dishes.dishes}
                         comments={this.props.comments.comments}
-                        addComment={this.props.addComment}
+                        postComment={this.props.postComment}
                         dishesLoading={this.props.dishes.isLoading}
                         dishesErrMess={this.props.dishes.errMess} /> }
                         commentsErrMess={this.props.comments.errMess} /> }
@@ -79,7 +79,7 @@ function DishWrapperComponent(props) {
     return(
         <DishDetail dish={props.dishes.filter((dish) => dish.id === parseInt(dishId, 10))[0]}
                     comments={props.comments.filter((comment) => comment.dishId === parseInt(dishId, 10))}
-                    addComment={props.addComment}
+                    postComment={props.postComment}
                     isLoading={props.dishesLoading}
                     errMess={props.dishesErrMess}
                     commentsErrMess={props.commentsErrMess}
@@ -95,7 +95,7 @@ function HomeWrapperComponent(props) {
               dishesLoading={props.dishesLoading}
               dishesErrMessage={props.dishesErrMess}
               promosLoading={props.promosLoading}
-              promosErrMessage={props.promosErrMess}
+              promosErrMess={props.promosErrMess}
         />
     );
 }
