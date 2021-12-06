@@ -8,7 +8,7 @@ import Footer from './FooterComponent.js';
 import DishDetail from './DishDetailComponent.js';
 import { Routes, Route, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { addComment, fetchDishes } from '../redux/ActionCreators.js';
+import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators.js';
 
 const mapStateToProps = state => {
     return{
@@ -21,13 +21,17 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = (dispatch) => ({
     addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-    fetchDishes: () => {dispatch(fetchDishes())}
+    fetchDishes: () => {dispatch(fetchDishes())},
+    fetchComments: () => {dispatch(fetchComments())},
+    fetchPromos: () => {dispatch(fetchPromos())},
 });
 
 class Main extends Component {
 
     componentDidMount() {
         this.props.fetchDishes();
+        this.props.fetchComments();
+        this.props.fetchPromos();
     }
 
     render() {
@@ -36,25 +40,31 @@ class Main extends Component {
                 <Header />
                 <Routes>
                     <Route path="/home" element={<HomeWrapperComponent dishes={this.props.dishes.dishes}
-                        promotions={this.props.promotions}
+                        promotions={this.props.promotions.promotions}
                         leaders={this.props.leaders}
                         dishesLoading={this.props.dishes.isLoading}
-                        dishesErrMess={this.props.dishes.errMess} /> }
+                        dishesErrMess={this.props.dishes.errMess}
+                        promosLoading={this.props.promotions.isLoading}
+                        promosErrMess={this.props.promotions.errMess} /> }
                     />
                     <Route exact path="/menu" element={<Menu dishes={this.props.dishes} /> } />}
                     <Route exact path="/contactus" element={<Contact /> } />
                     <Route exact path="/aboutus" element={<About leaders={this.props.leaders} /> } />
                     <Route path="/menu/:dishId" element={<DishWrapperComponent dishes={this.props.dishes.dishes}
-                        comments={this.props.comments} addComment={this.props.addComment}
+                        comments={this.props.comments.comments}
+                        addComment={this.props.addComment}
                         dishesLoading={this.props.dishes.isLoading}
                         dishesErrMess={this.props.dishes.errMess} /> }
+                        commentsErrMess={this.props.comments.errMess} /> }
                         />} 
                     />
                     <Route path="*" element={<HomeWrapperComponent dishes={this.props.dishes.dishes}
-                        promotions={this.props.promotions}
+                        promotions={this.props.promotions.promotions}
                         leaders={this.props.leaders}
                         dishesLoading={this.props.dishes.isLoading}
                         dishesErrMess={this.props.dishes.errMess}
+                        promosLoading={this.props.promotions.isLoading}
+                        promosErrMess={this.props.promotions.errMess} 
                         />}
                     />
                 </Routes>
@@ -72,6 +82,7 @@ function DishWrapperComponent(props) {
                     addComment={props.addComment}
                     isLoading={props.dishesLoading}
                     errMess={props.dishesErrMess}
+                    commentsErrMess={props.commentsErrMess}
         />
     );
 }
@@ -83,6 +94,8 @@ function HomeWrapperComponent(props) {
               leader={props.leaders.filter((leader) => leader.featured)[0]}
               dishesLoading={props.dishesLoading}
               dishesErrMessage={props.dishesErrMess}
+              promosLoading={props.promosLoading}
+              promosErrMessage={props.promosErrMess}
         />
     );
 }
